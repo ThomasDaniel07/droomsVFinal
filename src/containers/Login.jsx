@@ -1,8 +1,14 @@
 import React, { useRef } from 'react';
+
 import Logo from '../assets/Logo.png';
+
 import axios from 'axios'
+
 import "@fontsource/raleway";
+
 import "@fontsource/roboto"
+
+// FUNCTION FOR VERIFY THE LOGIN
 
 const VerificationLogin = (method,url,data)=>{
   axios({
@@ -17,12 +23,15 @@ const VerificationLogin = (method,url,data)=>{
 
 function Login() {
 
-  const Refuser = useRef();
+  //===============================
+  const Refuser = useRef(); //=====
 
-  const Refentity = useRef();
+  const Refentity = useRef(); //=== create variables where the login data is
 
-  const Refpassword = useRef();
+  const Refpassword = useRef();//== 
   
+  // FUNCTION FOR VERIFY LOGIN
+
   const peticion = ()=>{
     
 
@@ -43,6 +52,7 @@ function Login() {
     
 
   }
+
   return (
     <div className='bg-[#C7E5D3] w-full h-screen flex flex-col items-center justify-center'>
 
