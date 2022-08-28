@@ -2,9 +2,9 @@ import Login from "./containers/Login";
 
 function App() {
   return (
-    <div className="App">
-      <Login />
-    </div>
+      <div className="App">
+        <Login/>
+      </div>
   );
 }
 
