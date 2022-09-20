@@ -1,8 +1,6 @@
 import React, { useRef } from 'react';
 
-import Logo from '../assets/Logo.png';
-
-import axios from 'axios'
+import Logo from '../assets/Logo2.jpeg';
 
 import "@fontsource/raleway";
 
@@ -10,18 +8,23 @@ import "@fontsource/roboto"
 
 // FUNCTION FOR VERIFY THE LOGIN
 
-const VerificationLogin = (method,url,data)=>{
-  axios({
-    method:method,
-    url:url,
-    data: data
+const sendData = async(url,data)=>{
+
+  const peticion = await fetch (url,{
+
+    method:'POST',
+
+    body: JSON.stringify(data),
+
+    headers:{'Content-Type':'appiclation/json'}
+    
   })
-  .then((e)=>{
-    console.log(e.data);
-  })
+  const result = await peticion.json();
+
+  return result
 }
 
-function Login() {
+function Login(props) {
 
   //===============================
   const Refuser = useRef(); //=====
@@ -32,61 +35,71 @@ function Login() {
   
   // FUNCTION FOR VERIFY LOGIN
 
-  const peticion = ()=>{
+  const peticion = async ()=>{
     
-
     const Data = {
 
-      'usuario':Refuser.current.value,
+      'user':Refuser.current.value,
 
-      'entidad':Refentity.current.value,
+      'entity':Refentity.current.value,
 
-      'contrasena':Refpassword.current.value
+      'password':Refpassword.current.value
 
     }
+    const URL = 'http://localhost/drooms/backend/Conection.php';
 
-    const method = 'POST';
+    const result = await sendData(URL,Data)
 
-    const URL = 'http://localhost/drooms_query/funciones.php';
-
+    const boxError = document.querySelector('.boxError')
     
-
+    if (result.ERROR) {
+      boxError.innerHTML = result.ERROR;
+      boxError.style = 'padding:10px;'
+    }else {
+      boxError.innerHTML="";
+      boxError.style = 'padding:0px;'
+      props.access(result.STATUS);
+    }
   }
 
   return (
-    <div className='bg-[#C7E5D3] w-full h-screen flex flex-col items-center justify-center'>
+    <div className='background-style1 w-full h-screen flex flex-col items-center justify-center'>
 
       {/* LOGO OF DROOMS */}
 
-      <img src={Logo} alt="Logo of Drooms" className='rounded-full w-[217px] h-[210px] animate-[bounce_5s_linear_infinite] shadow-md' />
+      <img src={Logo} alt="Logo of Drooms" className='w-[217px] h-[210px] rounded-full animate-[bounce_5s_linear_infinite] shadow-md lg:w-72 lg:h-72' />
       
       {/* CONTAINER OF THE LOGIN FORM */}
 
-      <div className="form flex flex-col text-[18px] w-[249px]">
+      <div className="form flex flex-col text-[18px] w-[249px] lg:w-96">
 
         {/* INPUT FOR USER */}
 
-        <input type="text" ref={Refuser} name="user" id="user" placeholder='Usuario' className='p-1  placeholder:text-black shadow-lg' />
+        <input type="text" ref={Refuser} name="user" id="user" placeholder='Usuario' className='p-1  placeholder:text-black shadow-lg font-semibold border-2  border-[#21afd5]' />
 
-        <select name="" id="" ref={Refentity} className='bg-white placeholder:font-[700] mt-[40px] p-1 shadow-lg'>
+        <select name="" id="" ref={Refentity} className='bg-white placeholder:font-[700] mt-[40px] p-1 shadow-lg border-2  border-[#21afd5]'>
 
-          <option selected disabled>Entidad</option>
+          <option selected disabled className='font-semibold'>Entidad</option>
 
-          <option value="sanjose">San Jose</option>
+          <option value="sanjose" className='font-semibold'>San Jose</option>
 
-          <option value="sangabriel">San Gabriel</option>
+          <option value="sangabriel" className='font-semibold'>San Gabriel</option>
 
-          <option value="caldas">Inse Caldas</option>
+          <option value="caldas" className='font-semibold'>Inse Caldas</option>
 
         </select>
 
-        <input type="password" name="" ref={Refpassword} id="" placeholder='Contraseña' className='mt-[40px] shadow-lg p-1 placeholder:text-black' />
+        <input type="password" name="" ref={Refpassword} id="" placeholder='Contraseña' className='mt-[40px] shadow-lg p-1 placeholder:text-black font-semibold border-2  border-[#21afd5]' />
 
-        <button onClick={peticion} className='bg-[#25544B] text-white mt-[40px] p-1 w-[146px] m-auto font-bold shadow-lg hover:bg-[#3d8b7d] active:bg-[#3d8b7d]'>Login</button>
+        <div className='boxError bg-red-400 text-white mt-[40px]'>
+        </div>
+
+        <button onClick={peticion} className='bg-[#21afd5] text-white mt-[40px] p-1 w-[146px] m-auto font-bold shadow-xl hover:bg-[#0c4586] active:bg-[#0c4586] rounded-sm'>Login</button>
+
 
       </div>
 
-      <p className='m-5 text-center font-[Roboto] text-lg md:text-xl'>
+      <p className='m-5 text-center font-[Roboto] text-lg md:text-xl text-white'>
         ©COPYRIGHT 2022. Todos los derechos reservados. DIRECT BY Daniel Thomas
       </p>
 
